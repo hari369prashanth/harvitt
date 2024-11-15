@@ -174,6 +174,18 @@ CREATE TABLE "Announcement" (
 );
 
 -- CreateTable
+CREATE TABLE "Resource" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "fileUrl" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "classId" INTEGER NOT NULL,
+
+    CONSTRAINT "Resource_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_SubjectToTeacher" (
     "A" INTEGER NOT NULL,
     "B" TEXT NOT NULL
@@ -217,6 +229,9 @@ CREATE UNIQUE INDEX "Class_name_key" ON "Class"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Subject_name_key" ON "Subject"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Attendance_studentId_lessonId_date_key" ON "Attendance"("studentId", "lessonId", "date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_SubjectToTeacher_AB_unique" ON "_SubjectToTeacher"("A", "B");
@@ -274,6 +289,9 @@ ALTER TABLE "Event" ADD CONSTRAINT "Event_classId_fkey" FOREIGN KEY ("classId") 
 
 -- AddForeignKey
 ALTER TABLE "Announcement" ADD CONSTRAINT "Announcement_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Resource" ADD CONSTRAINT "Resource_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_SubjectToTeacher" ADD CONSTRAINT "_SubjectToTeacher_A_fkey" FOREIGN KEY ("A") REFERENCES "Subject"("id") ON DELETE CASCADE ON UPDATE CASCADE;

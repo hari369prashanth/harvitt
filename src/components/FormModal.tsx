@@ -1,9 +1,20 @@
 "use client";
 
 import {
+  deleteAnnouncement,
   deleteAssignment,
   deleteClass,
+  deleteEvent,
   deleteExam,
+  
+  deleteLesson,
+  
+  deleteParent,
+  
+  deleteResource,
+  
+  deleteResult,
+  
   deleteStudent,
   deleteSubject,
   deleteTeacher,
@@ -16,20 +27,25 @@ import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 
+
+
 const deleteActionMap = {
   subject: deleteSubject,
   class: deleteClass,
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
-// TODO: OTHER DELETE ACTIONS
-  parent: deleteSubject,
-  lesson: deleteSubject,
   assignment: deleteAssignment,
-  result: deleteSubject,
+
+  parent: deleteParent,
+  // TODO: OTHER DELETE ACTIONS
+  lesson: deleteLesson,
+  
+  result: deleteResult,
   attendance: deleteSubject,
-  event: deleteSubject,
-  announcement: deleteSubject,
+  event: deleteEvent,
+  announcement: deleteAnnouncement,
+  resource: deleteResource,
 };
 
 // USE LAZY LOADING
@@ -55,6 +71,27 @@ const ExamForm = dynamic(() => import("./forms/ExamForm"), {
 const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const LessonForm = dynamic(() => import("./forms/LessonForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ResultForm = dynamic(() => import("./forms/ResultForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ParentForm = dynamic(() => import("./forms/ParentForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ResourcesForm = dynamic(() => import("./forms/ResourcesForm"),{
+  loading: () => <h1>Loading...</h1>,
+});
 // TODO: OTHER FORMS
 
 const forms: {
@@ -62,6 +99,7 @@ const forms: {
     setOpen: Dispatch<SetStateAction<boolean>>,
     type: "create" | "update",
     data?: any,
+    initialData?: any,
     relatedData?: any
   ) => JSX.Element;
 } = {
@@ -114,6 +152,63 @@ const forms: {
       relatedData={relatedData}
     />
   ),
+  lesson: (setOpen, type, data, relatedData) => (
+    <LessonForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  event: (setOpen, type, data, relatedData) => (
+    <EventForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  announcement: (setOpen, type, data, relatedData) => (
+    <AnnouncementForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  result: (setOpen, type, data, relatedData) => (
+    <ResultForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  parent: (setOpen, type, data, relatedData) => (
+    <ParentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  attendance: (setOpen, type, data, relatedData) => (
+    <AttendanceForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  resource: (setOpen, type, data, relatedData) => (
+    <ResourcesForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+
 };
 
 const FormModal = ({

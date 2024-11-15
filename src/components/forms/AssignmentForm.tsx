@@ -1,4 +1,3 @@
-// components/forms/AssignmentForm.tsx
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +5,7 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { assignmentSchema, AssignmentSchema } from "@/lib/formValidationSchemas";
 import { createAssignment, updateAssignment } from "@/lib/actions";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +18,7 @@ const AssignmentForm = ({
   type: "create" | "update";
   data?: any;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  relatedData?: any;
+  relatedData?: any; // Make sure relatedData includes lessons
 }) => {
   const {
     register,
@@ -29,9 +28,11 @@ const AssignmentForm = ({
     resolver: zodResolver(assignmentSchema),
   });
 
-  const onSubmit = handleSubmit(async (data) => {
+  const router = useRouter();
+
+  const onSubmit = handleSubmit(async (formData) => {
     const action = type === "create" ? createAssignment : updateAssignment;
-    const result = await action(data);
+    const result = await action(formData);
     if (result.success) {
       toast(`Assignment has been ${type === "create" ? "created" : "updated"}!`);
       setOpen(false);
@@ -41,11 +42,9 @@ const AssignmentForm = ({
     }
   });
 
-  const router = useRouter();
-
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-      <h1 className="text-xl font-semibold">
+    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
+      <h1 className="text-2xl text-center font-bold">
         {type === "create" ? "Create a new assignment" : "Update the assignment"}
       </h1>
 
@@ -87,12 +86,13 @@ const AssignmentForm = ({
           <label className="text-xs text-gray-500">Lesson</label>
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
+            {...register("lessonId", { required: "Please select a lesson." })} // Add required validation
             defaultValue={data?.lessonId}
           >
+            <option value="" disabled>Select a lesson</option> {/* Optional placeholder */}
             {relatedData?.lessons?.map((lesson: { id: number; name: string }) => (
               <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
+                {lesson.name} {/* Ensure lesson name is displayed */}
               </option>
             ))}
           </select>

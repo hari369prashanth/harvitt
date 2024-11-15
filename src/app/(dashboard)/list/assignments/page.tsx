@@ -1,4 +1,4 @@
-import FormModal from "@/components/FormModal";
+import FormModal from "@/components/FormModal";  
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -14,6 +14,7 @@ type AssignmentList = Assignment & {
     subject: Subject;
     class: Class;
     teacher: Teacher;
+    name: string; // Ensure the lesson name is part of the type
   };
 };
 
@@ -26,20 +27,23 @@ const AssignmentListPage = async ({
   const { userId, sessionClaims } = auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
   const currentUserId = userId;
-  
-  
+
   const columns = [
     {
-      header: "Subject Name",
-      accessor: "name",
+      header: "Title", // Added a column for Title
+      accessor: "title", // Accessor for the assignment title
+    },
+    {
+      header: "Lesson Name", // Changed from "Subject Name" to "Lesson Name"
+      accessor: "lesson.name", // Changed accessor to get the lesson name
     },
     {
       header: "Class",
-      accessor: "class",
+      accessor: "lesson.class.name", // Assuming you want the class name from lesson
     },
     {
       header: "Teacher",
-      accessor: "teacher",
+      accessor: "lesson.teacher.name",
       className: "hidden md:table-cell",
     },
     {
@@ -60,15 +64,16 @@ const AssignmentListPage = async ({
   const renderRow = (item: AssignmentList) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-gray-200 text-sm hover:bg-cyan-600 hover:text-black "
     >
-      <td className="flex items-center gap-4 p-4">{item.lesson.subject.name}</td>
-      <td>{item.lesson.class.name}</td>
+      <td className="flex items-center gap-4 p-4">{item.title}</td> {/* Display assignment title */}
+      <td>{item.lesson.name}</td> {/* Display lesson name */}
+      <td>{item.lesson.class.name}</td> {/* Display class name */}
       <td className="hidden md:table-cell">
-        {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
+        {item.lesson.teacher.name + " " + item.lesson.teacher.surname} {/* Display teacher name */}
       </td>
       <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(item.dueDate)}
+        {new Intl.DateTimeFormat("en-US").format(item.dueDate)} {/* Format due date */}
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -88,7 +93,6 @@ const AssignmentListPage = async ({
   const p = page ? parseInt(page) : 1;
 
   // URL PARAMS CONDITION
-
   const query: Prisma.AssignmentWhereInput = {};
 
   query.lesson = {};
@@ -116,7 +120,6 @@ const AssignmentListPage = async ({
   }
 
   // ROLE CONDITIONS
-
   switch (role) {
     case "admin":
       break;
@@ -151,6 +154,7 @@ const AssignmentListPage = async ({
       include: {
         lesson: {
           select: {
+            name: true, // Ensure lesson name is selected
             subject: { select: { name: true } },
             teacher: { select: { name: true, surname: true } },
             class: { select: { name: true } },
@@ -162,8 +166,9 @@ const AssignmentListPage = async ({
     }),
     prisma.assignment.count({ where: query }),
   ]);
+  
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-transparent p-4 rounded-md flex-1 m-4 mt-10 text-white">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">
@@ -179,8 +184,8 @@ const AssignmentListPage = async ({
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
             {role === "admin" && (
-                <FormContainer table="assignment" type="create" />
-              )}
+              <FormContainer table="assignment" type="create" />
+            )}
           </div>
         </div>
       </div>

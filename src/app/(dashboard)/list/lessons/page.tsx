@@ -7,7 +7,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Lesson, Prisma, Subject, Teacher } from "@prisma/client";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
-
+import { format } from "date-fns";
 type LessonList = Lesson & { subject: Subject } & { class: Class } & {
   teacher: Teacher;
 };
@@ -25,12 +25,24 @@ const role = (sessionClaims?.metadata as { role?: string })?.role;
 
 const columns = [
   {
-    header: "Subject Name",
+    header: "Lesson Name",
     accessor: "name",
   },
   {
     header: "Class",
     accessor: "class",
+  },
+  {
+    header: "Day",
+    accessor: "day",
+  },
+  {
+    header: "Start Time",
+    accessor: "startTime",
+  },
+  {
+    header: "End Time",
+    accessor: "endTime",
   },
   {
     header: "Teacher",
@@ -46,14 +58,16 @@ const columns = [
       ]
     : []),
 ];
-
 const renderRow = (item: LessonList) => (
   <tr
     key={item.id}
-    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+    className="border-b border-gray-200 text-sm hover:bg-cyan-600 hover:text-black "
   >
-    <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
+    <td className="flex items-center gap-4 p-4">{item.name}</td>
     <td>{item.class.name}</td>
+    <td>{item.day}</td>
+    <td>{format(new Date(item.startTime), "PPpp")}</td> {/* Format Start Time */}
+    <td>{format(new Date(item.endTime), "PPpp")}</td>   {/* Format End Time */}
     <td className="hidden md:table-cell">
       {item.teacher.name + " " + item.teacher.surname}
     </td>
@@ -69,7 +83,6 @@ const renderRow = (item: LessonList) => (
     </td>
   </tr>
 );
-
   const { page, ...queryParams } = searchParams;
 
   const p = page ? parseInt(page) : 1;
@@ -114,9 +127,8 @@ const renderRow = (item: LessonList) => (
     }),
     prisma.lesson.count({ where: query }),
   ]);
-
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-transparent p-4 rounded-md flex-1 m-4 mt-10 text-white">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Lessons</h1>

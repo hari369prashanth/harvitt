@@ -25,7 +25,7 @@ model Student {
   sex         UserSex
   createdAt   DateTime     @default(now())
   parentId    String
-  parent      Parent       @relation(fields: [parentId], references: [id], onDelete: Cascade) 
+  parent      Parent       @relation(fields: [parentId], references: [id])
   classId     Int
   class       Class        @relation(fields: [classId], references: [id])
   gradeId     Int
@@ -58,9 +58,8 @@ model Parent {
   username  String    @unique
   name      String
   surname   String
-
   email     String?   @unique
-  phone     String?    @unique
+  phone     String    @unique
   address   String
   createdAt DateTime  @default(now())
   students  Student[]
@@ -71,7 +70,7 @@ model Grade {
   level Int @unique
 
   students Student[]
-  classes Class[]
+  classess Class[]
 }
 
 model Class {
@@ -87,6 +86,7 @@ model Class {
   grade         Grade          @relation(fields: [gradeId], references: [id])
   events        Event[]
   announcements Announcement[]
+  resources Resource[]
 }
 
 model Subject {
@@ -130,7 +130,7 @@ model Assignment {
   title     String
   startDate DateTime
   dueDate   DateTime
-  
+
   lessonId Int
   lesson   Lesson   @relation(fields: [lessonId], references: [id])
   results  Result[]
@@ -149,14 +149,16 @@ model Result {
 }
 
 model Attendance {
-  id      Int      @id @default(autoincrement())
-  date    DateTime
-  present Boolean
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  present   Boolean
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
   lessonId  Int
   lesson    Lesson  @relation(fields: [lessonId], references: [id])
+
+  @@unique([studentId, lessonId, date])
 }
 
 model Event {
@@ -191,4 +193,13 @@ enum Day {
   WEDNESDAY
   THURSDAY
   FRIDAY
+}
+model Resource {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  fileUrl     String?
+  createdAt   DateTime @default(now())
+  classId     Int
+  class       Class    @relation(fields: [classId], references: [id])
 }

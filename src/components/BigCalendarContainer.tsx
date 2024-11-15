@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import BigCalendar from "./BigCalender";
-import { adjustScheduleToCurrentWeek } from "@/lib/utils";
 
 const BigCalendarContainer = async ({
   type,
@@ -17,17 +16,16 @@ const BigCalendarContainer = async ({
     },
   });
 
+  // Map and format data for the calendar component
   const data = dataRes.map((lesson) => ({
     title: lesson.name,
-    start: lesson.startTime,
-    end: lesson.endTime,
+    start: new Date(lesson.startTime), // Ensure start and end times are Date objects
+    end: new Date(lesson.endTime),
   }));
 
-  const schedule = adjustScheduleToCurrentWeek(data);
-
   return (
-    <div className="">
-      <BigCalendar data={schedule} />
+    <div className="calendar-container">
+      <BigCalendar data={data} />
     </div>
   );
 };

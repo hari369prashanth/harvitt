@@ -70,14 +70,14 @@ const StudentForm = ({
   const { grades, classes } = relatedData;
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-      <h1 className="text-xl font-semibold">
+    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
+      <h1 className="text-2xl text-center font-bold pb-6">
         {type === "create" ? "Create a new student" : "Update the student"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">
         Authentication Information
       </span>
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between flex-wrap gap-8">
         <InputField
           label="Username"
           name="username"

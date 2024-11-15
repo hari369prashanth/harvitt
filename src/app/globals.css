@@ -2,107 +2,363 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.odd\:bg-transparent-purple-contrast {
+  background-color: rgba(0, 195, 255, 0.2); /* Light purple with transparency */
+  color: #9c0f72; /* White text color */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Light white border */
+  border-radius: 8px;
+  backdrop-filter: blur(10px); /* Slight blur effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Darker shadow for depth */
+}
+
+/* Transparent Yellow Background with Glass Effect for Even Elements */
+.even\:bg-transparent-yellow-contrast {
+  background-color: rgba(124, 124, 124, 0.2); /* Light yellow with transparency */
+  color: #ffffff; /* White text color */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Light white border */
+  border-radius: 8px;
+  backdrop-filter: blur(10px); /* Slight blur effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Darker shadow for depth */
+}
+body {
+  background-image: url('/body-background.png'); /* Path is relative to the public folder */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow-x: hidden !important;
+   
+  /* Prevent horizontal scroll */
+}
+.white-image {
+  filter: brightness(0) invert(1); /* Makes image white */
+}
+/* Optional: Additional settings to customize the background on specific elements */
+.main-container {
+  background: url('/body-background.png') no-repeat center center;
+  background-size: cover;
+}
+.shadow-blue-glow {
+  box-shadow: 0 4px 15px rgba(0, 153, 255, 0.5);
+}
+/* React Calendar Styling */
 .react-calendar {
   width: 100% !important;
-  border: none !important;
   font-family: "Inter", sans-serif !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
 }
 
 .react-calendar__navigation__label__labelText {
-  font-weight: 600;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  color: #ffffff !important;
+}
+
+.react-calendar__tile {
+  padding: 10px !important;
+  border-radius: 6px !important;
+  transition: background-color 0.3s ease !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 .react-calendar__tile--active {
-  background-color: #c3ebfa !important;
-  color: black !important;
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  color: #000000 !important;
 }
 
-.rbc-btn-group:first-child {
-  display: none !important;
+.react-calendar__tile:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
 }
 
-.rbc-toolbar-label {
-  text-align: right !important;
-  padding: 0px 20px !important;
+.react-calendar__month-view__days__day--weekend {
+  color: #ff6961 !important;
 }
 
-.rbc-btn-group:last-child {
-  font-size: 13px !important;
-}
-
-.rbc-btn-group:last-child button {
+/* Customizing the navigation buttons */
+.rbc-calendar {
+  font-family: "Inter", sans-serif !important;
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Transparent background */
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   border: none !important;
-  background-color: #f1f0ff !important;
-  margin-left: 2px !important;
+  padding: 0 !important;
 }
 
-.rbc-toolbar button.rbc-active {
-  background-color: #dbdafe !important;
-  box-shadow: none !important;
+.rbc-toolbar {
+  
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Transparent toolbar */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important; /* Light border */
+  padding: 10px 20px !important;
 }
 
-.rbc-time-view {
-  border-color: #eee !important;
-}
-
-.rbc-time-header {
-  display: none !important;
-}
-
-.rbc-time-content {
+.rbc-btn-group button {
+  
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Light button background */
+  color: #fff !important;
   border: none !important;
+  padding: 6px 12px !important;
+  border-radius: 8px;
 }
 
-.rbc-time-gutter.rbc-time-column {
-  font-size: 12px !important;
-}
-
-.rbc-time-gutter.rbc-time-column .rbc-timeslot-group {
-  padding: 0px 20px !important;
-}
-
-.rbc-timeslot-group {
-  background-color: #f7fdff !important;
+.rbc-btn-group button:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important; /* Light hover effect */
 }
 
 .rbc-day-slot {
-  font-size: 14px !important;
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Transparent day slots */
+}
+
+.rbc-day-bg {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.rbc-month-view,
+.rbc-week-view,
+.rbc-day-view {
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .rbc-event {
-  border: none !important;
-  color: black !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
   padding: 10px !important;
-  margin: 10px !important;
-  width: 99% !important;
+  border-left: 5px solid #0077b6 !important; /* Left border color */
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  margin: 5px 0 !important;
 }
 
-.rbc-event:nth-child(1) {
-  background-color: #e2f8ff !important;
-}
-.rbc-event:nth-child(2) {
-  background-color: #fefce8 !important;
-}
-.rbc-event:nth-child(3) {
-  background-color: #f2f1ff !important;
-}
-.rbc-event:nth-child(4) {
-  background-color: #fdf2fb !important;
-}
-.rbc-event:nth-child(5) {
-  background-color: #e2f8ff !important;
-}
-.rbc-event:nth-child(6) {
-  background-color: #fefce8 !important;
-}
-.rbc-event:nth-child(7) {
-  background-color: #f2f1ff !important;
-}
-.rbc-event:nth-child(8) {
-  background-color: #fdf2fb !important;
+.rbc-event-label {
+  color: #f0f0f0 !important; /* Light gray for event labels */
 }
 
-.rbc-event-label{
-  color: gray !important;
+.rbc-event:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+.rbc-time-slot {
+  background-color: rgba(255, 255, 255, 0.05) !important; /* Lighter background for time slots */
+}
+
+.rbc-time-view {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.rbc-header {
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Transparent headers */
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+
+.rbc-header:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important; /* Lighter hover for headers */
+}
+
+.rbc-day-bg {
+  background-color: rgba(255, 255, 255, 0.1) !important; /* Transparent background for day grid */
+}
+
+/* Customizing the view buttons */
+.rbc-toolbar button.rbc-active {
+  
+  background-color: #c3ebfa !important;
+  box-shadow: none !important;
+  color: #333 !important;
+}
+
+/* Adjusting event background color on odd/even */
+.rbc-event:nth-child(odd) {
+  background-color: rgba(85, 197, 231, 0.8) !important;
+}
+
+.rbc-event:nth-child(even) {
+  background-color: rgba(233, 217, 41, 0.8) !important;
+}
+
+.rbc-event-label {
+  font-size: 12px !important;
   margin-bottom: 5px;
+}
+/* General Overflow Fix */
+body {
+  overflow-x: hidden !important; /* Disable horizontal scroll globally */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .rbc-time-gutter.rbc-time-column {
+    font-size: 12px !important;
+  }
+
+  .rbc-event {
+    padding: 8px !important;
+    font-size: 14px !important;
+  }
+
+  .react-calendar {
+    box-shadow: none !important;
+    padding: 8px !important;
+  }
+
+  .rbc-time-content {
+    padding: 0 !important; /* Remove extra padding for mobile */
+  }
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Optional: keep padding while hiding scrollbar */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+.text-white-contrast {
+  color: #ffffff !important; /* Pure white text for high visibility */
+}
+
+.bg-transparent-white-contrast {
+  background-color: rgba(255, 255, 255, 0.09); /* Semi-transparent background */
+  color: #ffffff; /* White text color */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Slightly opaque white border */
+  border-radius: 8px;
+  backdrop-filter: blur(10px); /* Slight blur to enhance transparency */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Darker shadow for depth */
+}
+
+/* Adjusting Calendar Tiles for Better Contrast */
+.react-calendar__tile {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important; /* White text */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+}
+
+.react-calendar__tile--active {
+  background-color: rgba(255, 255, 255, 0.4) !important; /* Slightly opaque for active state */
+  color: #000000 !important; /* Dark text for contrast on active tiles */
+}
+
+/* Calendar Navigation and Other Text Enhancements */
+.react-calendar__navigation__label__labelText {
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff; /* White for contrast */
+}
+
+.react-calendar__tile:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important; /* Lighter hover */
+  color: #ffffff !important;
+}
+
+/* Border and Background Color Adjustments for Event Tiles */
+.rbc-event {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important; /* White text */
+  border: 1px solid rgba(255, 255, 255, 0.4) !important; /* Lighter border */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow */
+}
+
+/* General Styling for High Contrast Text */
+.text-white {
+  color: #ffffff !important;
+}
+.text-light-gray {
+  color: #f0f0f0 !important; /* Light gray text for contrast on darker backgrounds */
+}
+.border-light {
+  border-color: rgba(255, 255, 255, 0.5) !important; /* Light white borders */
+}
+.hover-effect {
+  position: relative; /* For positioning pseudo-elements */
+  display: inline-block;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px; /* Rounded corners */
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Initial shadow */
+  padding: 12px 24px; /* Padding for spacing */
+  color: white; /* Text color */
+}
+
+/* Neon glow effect */
+.hover-effect::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: transparent;
+  border-radius: inherit;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 1), 0 0 20px rgba(0, 255, 255, 0.8); /* Neon blue glow */
+  opacity: 0;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Neon glow and pulse animation on hover */
+.hover-effect:hover::before {
+  opacity: 1;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.7), 0 0 70px rgba(0, 255, 255, 0.4); /* Intense neon glow */
+}
+
+/* Background pulse effect */
+.hover-effect:hover {
+  transform: translateY(-4px); /* Elevate on hover */
+  box-shadow: 0 8px 24px rgba(0, 255, 255, 0.4); /* Enhanced glow shadow */
+  background-color: rgba(0, 255, 255, 0.4); /* Slight background color shift */
+  animation: pulseEffect 1s ; /* Background pulse animation */
+}
+
+/* Pulse effect animation for background color */
+@keyframes pulseEffect {
+  0% {
+    background-color: rgba(0, 255, 255, 0.4); /* Initial light background */
+  }
+  50% {
+    background-color: rgba(0, 255, 255, 0.4); /* Slightly darker */
+  }
+  100% {
+    background-color: rgba(0, 255, 255, 0.4); /* Return to initial */
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out;
 }

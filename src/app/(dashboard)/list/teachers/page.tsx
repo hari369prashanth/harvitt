@@ -61,7 +61,7 @@ const TeacherListPage = async ({
   const renderRow = (item: TeacherList) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-gray-200 text-sm hover:bg-cyan-600 hover:text-black " // Removed 'even:bg-slate-50'
     >
       <td className="flex items-center gap-4 p-4">
         <Image
@@ -73,7 +73,7 @@ const TeacherListPage = async ({
         />
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item?.email}</p>
+          <p className="text-xs text-white-900 ">{item?.email}</p>
         </div>
       </td>
       <td className="hidden md:table-cell">{item.username}</td>
@@ -88,25 +88,20 @@ const TeacherListPage = async ({
       <td>
         <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
-              <Image src="/view.png" alt="" width={16} height={16} />
+            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky ">
+              <Image src="/view.png" alt="" width={18} height={18}  />
             </button>
           </Link>
           {role === "admin" && (
-            // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
-            //   <Image src="/delete.png" alt="" width={16} height={16} />
-            // </button>
             <FormContainer table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
     </tr>
   );
+
   const { page, ...queryParams } = searchParams;
-
   const p = page ? parseInt(page) : 1;
-
-  // URL PARAMS CONDITION
 
   const query: Prisma.TeacherWhereInput = {};
 
@@ -145,7 +140,7 @@ const TeacherListPage = async ({
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-transparent p-4 rounded-md flex-1 m-4 mt-10 text-white">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Teachers</h1>

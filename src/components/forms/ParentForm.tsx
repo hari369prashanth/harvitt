@@ -1,115 +1,120 @@
+// ParentForm.tsx
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import InputField from "../InputField";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { parentSchema, ParentSchema } from "@/lib/formValidationSchemas";
 import { createParent, updateParent } from "@/lib/actions";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-interface ParentFormProps {
-  type: "create" | "update";
-  data?: ParentSchema;
-  relatedData?: { students: { id: string; name: string; surname: string }[] };
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const ParentForm = ({ type, data, relatedData, setOpen }: ParentFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<ParentSchema>({
-    resolver: zodResolver(parentSchema),
-    defaultValues: data,
-  });
-
-  const onSubmit = async (formData: ParentSchema) => {
-    const action = type === "create" ? createParent : updateParent;
-    const result = await action(formData);
-
-    if (result.success) {
-      toast(`${type === "create" ? "Parent created!" : "Parent updated!"}`);
-      setOpen(false);
-    } else {
-      toast.error("An error occurred. Please try again.");
-    }
-  };
-
-  useEffect(() => {
-    if (data) reset(data);
-  }, [data, reset]);
+const ParentForm = ({
+    type,
+    data,
+    setOpen,
+    relatedData, // Add this line to accept the new prop
+  }: {
+    type: "create" | "update";
+    data?: any;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    relatedData?: any; // Add this line to type the new prop
+  }) => {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm<ParentSchema>({
+      resolver: zodResolver(parentSchema),
+    });
+  
+    const router = useRouter();
+  
+    const onSubmit = handleSubmit((data) => {
+      const action = type === "create" ? createParent : updateParent;
+      action(data).then((response) => {
+        if (response.success) {
+          toast(`Parent has been ${type === "create" ? "created" : "updated"}!`);
+          setOpen(false);
+          router.refresh();
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
+      });
+    });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <input
-        type="text"
-        placeholder="Username"
-        {...register("username")}
-        className="input"
-      />
-      {errors.username && <p className="text-red-600">{errors.username.message}</p>}
-
-      <input
-        type="text"
-        placeholder="First Name"
-        {...register("name")}
-        className="input"
-      />
-      {errors.name && <p className="text-red-600">{errors.name.message}</p>}
-
-      <input
-        type="text"
-        placeholder="Last Name"
-        {...register("surname")}
-        className="input"
-      />
-      {errors.surname && <p className="text-red-600">{errors.surname.message}</p>}
-
-      <input
-        type="email"
-        placeholder="Email"
-        {...register("email")}
-        className="input"
-      />
-      {errors.email && <p className="text-red-600">{errors.email.message}</p>}
-
-      <input
-        type="text"
-        placeholder="Phone"
-        {...register("phone")}
-        className="input"
-      />
-      {errors.phone && <p className="text-red-600">{errors.phone.message}</p>}
-
-      <input
-        type="text"
-        placeholder="Address"
-        {...register("address")}
-        className="input"
-      />
-      {errors.address && <p className="text-red-600">{errors.address.message}</p>}
-
-      {/* Select associated students */}
-      <Controller
-        name="studentIds" // Ensure this matches the schema definition
-        control={control}
-        render={({ field }) => (
-          <select {...field} multiple className="input">
-            {relatedData?.students.map(student => (
-              <option key={student.id} value={student.id}>
-                {student.name} {student.surname}
-              </option>
-            ))}
-          </select>
-        )}
-      />
-      {errors.studentIds && <p className="text-red-600">{errors.studentIds.message}</p>}
-
-      <button type="submit" className="btn-primary">
-        {type === "create" ? "Create Parent" : "Update Parent"}
+    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
+      <h1 className="text-2xl text-center font-bold pb-6">
+        {type === "create" ? "Create a new parent" : "Update the parent"}
+      </h1>
+      <div className="flex justify-between flex-wrap gap-6">
+        <InputField
+          label="Username"
+          name="username"
+          defaultValue={data?.username}
+          register={register}
+          error={errors?.username}
+        />
+        <InputField
+          label="Email"
+          name="email"
+          defaultValue={data?.email}
+          register={register}
+          error={errors?.email}
+        />
+        <InputField
+          label="Phone"
+          name="phone"
+          defaultValue={data?.phone}
+          register={register}
+          error={errors.phone}
+        />
+      </div>
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label="First Name"
+          name="name"
+          defaultValue={data?.name}
+          register={register}
+          error={errors.name}
+        />
+        <InputField
+          label="Last Name"
+          name="surname"
+          defaultValue={data?.surname}
+          register={register}
+          error={errors.surname}
+        />
+        <InputField
+          label="Address"
+          name="address"
+          defaultValue={data?.address}
+          register={register}
+          error={errors.address}
+        />
+        <InputField
+          label="Student ID"
+          name="studentId"
+          defaultValue={data?.studentId}
+          register={register}
+          error={errors.studentId}
+        />
+      </div>
+      <InputField
+      label="Password"
+      name="password"
+      defaultValue={data?.password || ""}
+      register={register}
+      error={errors?.password}
+      type="password"
+    />
+      {errors.studentId && (
+        <span className="text-red-500">{errors.studentId.message}</span>
+      )}
+      <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
+        {type === "create" ? "Create" : "Update"}
       </button>
     </form>
   );

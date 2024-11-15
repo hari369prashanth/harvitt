@@ -67,12 +67,12 @@ const ClassForm = ({
   const { teachers, grades } = relatedData;
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-      <h1 className="text-xl font-semibold">
+    <form className="flex flex-col gap-8 p-4 text-black " onSubmit={onSubmit}>
+      <h1 className="text-2xl text-center font-bold pb-6">
         {type === "create" ? "Create a new class" : "Update the class"}
       </h1>
 
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between flex-wrap gap-8">
         <InputField
           label="Class name"
           name="name"

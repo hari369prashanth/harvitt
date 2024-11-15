@@ -14,6 +14,8 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
+        'transparent-purple-contrast': 'rgba(172, 121, 255, 0.2)', // Light purple with transparency
+        'transparent-yellow-contrast': 'rgba(124, 124, 124, 0.2)',
         lamaSky: "#C3EBFA",
         lamaSkyLight: "#EDF9FD",
         lamaPurple: "#CFCEFF",

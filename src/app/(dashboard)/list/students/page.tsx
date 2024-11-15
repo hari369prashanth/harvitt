@@ -59,7 +59,7 @@ const columns = [
 const renderRow = (item: StudentList) => (
   <tr
     key={item.id}
-    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+    className="border-b border-gray-200 text-sm hover:bg-cyan-600 hover:text-black "
   >
     <td className="flex items-center gap-4 p-4">
       <Image
@@ -71,7 +71,7 @@ const renderRow = (item: StudentList) => (
       />
       <div className="flex flex-col">
         <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-xs text-gray-500">{item.class.name}</p>
+        <p className="text-xs text-white-900">{item.class.name}</p>
       </div>
     </td>
     <td className="hidden md:table-cell">{item.username}</td>
@@ -140,7 +140,7 @@ const [data, count] = await prisma.$transaction([
 ]);
 
 return (
-  <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+  <div className="bg-transparent p-4 rounded-md flex-1 m-4 mt-10 text-white">
     {/* TOP */}
     <div className="flex items-center justify-between">
       <h1 className="hidden md:block text-lg font-semibold">All Students</h1>

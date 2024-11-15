@@ -3,49 +3,37 @@ import Image from "next/image";
 import {
   RadialBarChart,
   RadialBar,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
-
 const CountChart = ({ boys, girls }: { boys: number; girls: number }) => {
   const data = [
-    {
-      name: "Total",
-      count: boys+girls,
-      fill: "white",
-    },
-    {
-      name: "Girls",
-      count: girls,
-      fill: "#FAE27C",
-    },
-    {
-      name: "Boys",
-      count: boys,
-      fill: "#C3EBFA",
-    },
+    { name: "Total", count: boys + girls, fill: "lightgrey" },
+    { name: "Girls", count: girls, fill: "#F4C500" },
+    { name: "Boys", count: boys, fill: "#75B9E6" },
   ];
+
   return (
-    <div className="relative w-full h-[75%]">
+    <div className="relative w-full h-72 bg-transparent">
       <ResponsiveContainer>
         <RadialBarChart
           cx="50%"
           cy="50%"
           innerRadius="40%"
-          outerRadius="100%"
-          barSize={32}
+          outerRadius="90%"
+          barSize={24}
           data={data}
+          
         >
           <RadialBar background dataKey="count" />
         </RadialBarChart>
       </ResponsiveContainer>
       <Image
         src="/maleFemale.png"
-        alt=""
-        width={50}
-        height={50}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        alt="Gender Icon"
+        width={40}
+        height={40}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-80"
       />
     </div>
   );
