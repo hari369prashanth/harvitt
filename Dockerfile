@@ -13,6 +13,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+RUN npx prisma generate
 # Generate Database
 RUN npx prisma migrate dev --name init
 
