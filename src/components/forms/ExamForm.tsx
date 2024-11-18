@@ -67,72 +67,108 @@ const ExamForm = ({
   const { lessons } = relatedData;
 
   return (
-    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
-      <h1 className="text-2xl text-center font-bold pb-6">
-        {type === "create" ? "Create a new exam" : "Update the exam"}
-      </h1>
+    <div className="block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-full max-w-4xl  overflow-hidden">
+      <form
+        className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black overflow-y-auto h-full"
+        onSubmit={onSubmit}
+      >
+        <h1 className="text-2xl font-bold text-center pb-4">
+          {type === "create" ? "Create a New Exam" : "Update the Exam"}
+        </h1>
 
-      <div className="flex justify-between flex-wrap gap-4">
-        <InputField
-          label="Exam title"
-          name="title"
-          defaultValue={data?.title}
-          register={register}
-          error={errors?.title}
-        />
-        <InputField
-          label="Start Date"
-          name="startTime"
-          defaultValue={data?.startTime}
-          register={register}
-          error={errors?.startTime}
-          type="datetime-local"
-        />
-        <InputField
-          label="End Date"
-          name="endTime"
-          defaultValue={data?.endTime}
-          register={register}
-          error={errors?.endTime}
-          type="datetime-local"
-        />
-        {data && (
+        <span className="text-sm text-gray-500 font-medium">Exam Details</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Exam Title */}
           <InputField
-            label="Id"
-            name="id"
-            defaultValue={data?.id}
+            label="Exam Title"
+            name="title"
+            defaultValue={data?.title}
             register={register}
-            error={errors?.id}
-            hidden
+            error={errors?.title}
+            placeholder="Enter exam title"
           />
-        )}
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Lesson</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-            {...register("lessonId")}
-            defaultValue={data?.teachers}
-          >
-            {lessons.map((lesson: { id: number; name: string }) => (
-              <option value={lesson.id} key={lesson.id}>
-                {lesson.name}
+
+          {/* Start Date */}
+          <InputField
+            label="Start Date"
+            name="startTime"
+            type="datetime-local"
+            defaultValue={data?.startTime}
+            register={register}
+            error={errors?.startTime}
+          />
+
+          {/* End Date */}
+          <InputField
+            label="End Date"
+            name="endTime"
+            type="datetime-local"
+            defaultValue={data?.endTime}
+            register={register}
+            error={errors?.endTime}
+          />
+
+          {/* Lesson Selection */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600">Lesson</label>
+            <select
+              className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+              {...register("lessonId")}
+              defaultValue={data?.lessonId || ""}
+            >
+              <option value="" disabled>
+                Select Lesson
               </option>
-            ))}
-          </select>
-          {errors.lessonId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.lessonId.message.toString()}
-            </p>
+              {lessons?.length > 0 ? (
+                lessons.map((lesson: { id: number; name: string }) => (
+                  <option value={lesson.id} key={lesson.id}>
+                    {lesson.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  No Lessons Available
+                </option>
+              )}
+            </select>
+            {errors.lessonId?.message && (
+              <p className="text-xs text-red-400">
+                {errors.lessonId.message.toString()}
+              </p>
+            )}
+          </div>
+
+          {/* Hidden ID Field */}
+          {data && (
+            <InputField
+              label="ID"
+              name="id"
+              defaultValue={data?.id}
+              register={register}
+              error={errors?.id}
+              hidden
+            />
           )}
         </div>
-      </div>
-      {state.error && (
-        <span className="text-red-500">Something went wrong!</span>
-      )}
-      <button className="bg-blue-400 text-white p-2 rounded-md">
-        {type === "create" ? "Create" : "Update"}
-      </button>
-    </form>
+
+        {/* Error Display */}
+        {state.error && (
+          <p className="text-sm text-center text-red-500">
+            Something went wrong! Please try again.
+          </p>
+        )}
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+        >
+          {type === "create" ? "Create Exam" : "Update Exam"}
+        </button>
+      </form>
+    </div>
+  </div>
   );
 };
 

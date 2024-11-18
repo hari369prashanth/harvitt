@@ -55,10 +55,10 @@ const ResourceForm = ({
 
   return (
     <form
-      className="flex flex-col gap-6 bg-transparent-white-contrast p-6 rounded-lg shadow-lg  mx-auto"
+      className="flex flex-col gap-6 bg-white bg-opacity-80  p-6 rounded-lg shadow-lg  mx-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-2xl font-bold text-black mb-2">
+      <h1 className="text-2xl font-bold text-black  text-center mb-2">
         {type === "create" ? "Create a New Resource" : "Update Resource"}
       </h1>
       <span className="text-sm text-black font-medium">Resource Information</span>
@@ -78,8 +78,7 @@ const ResourceForm = ({
         defaultValue={data?.description}
         register={register}
         error={errors?.description}
-        className="w-full h-36 resize-none" // Enables multi-line input
-         
+        className="w-full h-auto resize-none" 
       />
 
       {/* ClassId Dropdown */}

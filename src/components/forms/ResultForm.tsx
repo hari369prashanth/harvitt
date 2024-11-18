@@ -70,89 +70,101 @@ const ResultForm = ({
   const { students, exams, assignments } = relatedData || { students: [], exams: [], assignments: [] };
 
   return (
-    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
-      <h1 className="text-2xl text-center font-bold pb-6">
-        {type === "create" ? "Create a new result" : "Update the result"}
-      </h1>
+    <div className="block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+      <div className="relative w-full max-w-4xl  overflow-hidden">
+        <form
+          className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black overflow-y-auto h-full"
+          onSubmit={onSubmit}
+        >
+          <h1 className="text-2xl font-bold text-center pb-4">
+            {type === "create" ? "Create a New Result" : "Update Result"}
+          </h1>
 
-      <div className="flex justify-between flex-wrap gap-8">
-        <InputField
-          label="Score"
-          name="score"
-          defaultValue={data?.score ?? 0} // Ensure default value is numeric
-          register={register}
-          error={errors?.score}
-          type="number"
-          
-        />
+          <span className="text-sm text-gray-500 font-medium">
+            Result Details
+          </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <InputField
+              label="Score"
+              name="score"
+              defaultValue={data?.score ?? 0}
+              register={register}
+              error={errors?.score}
+              type="number"
+            />
 
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-black">Student</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full text-black"
-            {...register("studentId")}
-            defaultValue={data?.studentId}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Student</label>
+              <select
+                className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+                {...register("studentId")}
+                defaultValue={data?.studentId}
+              >
+                {students.map((student: { id: string; name: string }) => (
+                  <option value={student.id} key={student.id}>
+                    {student.name}
+                  </option>
+                ))}
+              </select>
+              {errors.studentId?.message && (
+                <p className="text-xs text-red-400">
+                  {errors.studentId.message.toString()}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Exam</label>
+              <select
+                className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+                {...register("examId")}
+                defaultValue={data?.examId || ""}
+              >
+                <option value="">No Exam</option>
+                {exams.map((exam: { id: number; title: string }) => (
+                  <option value={exam.id} key={exam.id}>
+                    {exam.title}
+                  </option>
+                ))}
+              </select>
+              {errors.examId?.message && (
+                <p className="text-xs text-red-400">
+                  {errors.examId.message.toString()}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600">Assignment</label>
+              <select
+                className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+                {...register("assignmentId")}
+                defaultValue={data?.assignmentId || ""}
+              >
+                <option value="">No Assignment</option>
+                {assignments.map((assignment: { id: number; title: string }) => (
+                  <option value={assignment.id} key={assignment.id}>
+                    {assignment.title}
+                  </option>
+                ))}
+              </select>
+              {errors.assignmentId?.message && (
+                <p className="text-xs text-red-400">
+                  {errors.assignmentId.message.toString()}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
           >
-            {students.map((student: { id: string; name: string }) => (
-              <option value={student.id} key={student.id}>
-                {student.name}
-              </option>
-            ))}
-          </select>
-          {errors.studentId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.studentId.message.toString()}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-black">Exam</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full text-black"
-            {...register("examId")}
-            defaultValue={data?.examId || ""} // Ensure default value is a string for the select
-          >
-            <option value="">No Exam</option>
-            {exams.map((exam: { id: number; title: string }) => (
-              <option value={exam.id} key={exam.id}>
-                {exam.title}
-              </option>
-            ))}
-          </select>
-          {errors.examId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.examId.message.toString()}
-            </p>
-          )}
-        </div>
-
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-black">Assignment</label>
-          <select
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full text-black"
-            {...register("assignmentId")}
-            defaultValue={data?.assignmentId || ""} // Ensure default value is a string for the select
-          >
-            <option value="">No Assignment</option>
-            {assignments.map((assignment: { id: number; title: string }) => (
-              <option value={assignment.id} key={assignment.id}>
-                {assignment.title}
-              </option>
-            ))}
-          </select>
-          {errors.assignmentId?.message && (
-            <p className="text-xs text-red-400">
-              {errors.assignmentId.message.toString()}
-            </p>
-          )}
-        </div>
+            {type === "create" ? "Create" : "Update"}
+          </button>
+        </form>
       </div>
-
-      <button type="submit" className="bg-blue-400 text-black p-2 rounded-md">
-        {type === "create" ? "Create" : "Update"}
-      </button>
-    </form>
+    </div>
   );
 };
 

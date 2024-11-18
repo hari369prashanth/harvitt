@@ -41,19 +41,19 @@ const SingleStudentPage = async ({
         {/* TOP */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* USER INFO CARD */}
-          <div className="shadow-lg border border-gray-200 py-6 px-4 rounded-xl flex-1 flex gap-6">
-            <div className="w-1/3">
+          <div className="  items-center justify-center shadow-lg border border-gray-200 py-6 px-4 rounded-xl flex-1 flex gap-6">
+            <div className="w-1/3 pl-10 ">
               <Image
                 src={student.img || "/noAvatar.png"}
                 alt=""
-                width={144}
-                height={144}
-                className="w-36 h-36 rounded-full object-cover shadow-md"
+                width={100}
+                height={100}
+                className="w-30 h-30  rounded-full object-cover shadow-md "
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4 text-white">
               <div className="flex items-center gap-4">
-                <h1 className="text-xl font-semibold">
+                <h1 className="text-2xl font-semibold">
                   {student.name + " " + student.surname}
                 </h1>
                 {role === "admin" && (
@@ -61,7 +61,7 @@ const SingleStudentPage = async ({
                 )}
               </div>
              
-              <div className="flex items-center justify-between gap-2 flex-wrap text-xs font-medium text-white">
+              <div className="flex flex-col  justify-start gap-2  text-md font-medium text-white">
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/blood.png" alt="" width={14} height={14} className="white-image"/>
                   <span>{student.bloodType}</span>
@@ -76,7 +76,7 @@ const SingleStudentPage = async ({
                   <Image src="/mail.png" alt="" width={14} height={14} className="white-image"/>
                   <span>{student.email || "-"}</span>
                 </div>
-                <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
+                <div className="flex items-center gap-2  ">
                   <Image src="/phone.png" alt="" width={14} height={14} className="white-image"/>
                   <span>{student.phone || "-"}</span>
                 </div>

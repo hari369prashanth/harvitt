@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";  
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import Performance from "@/components/Performance";
 
 const UserProfilePage = async () => {
   const { userId } = auth();
@@ -99,10 +100,15 @@ const UserProfilePage = async () => {
           <div className="flex justify-between border-b border-gray-600 py-2">
             <span className="text-white font-medium">Age:</span>
             <span>{userProfile.age}</span>
+            
           </div>
+          <Performance  role="student" studentId={user.id}/>
         </div>
+        
       </div>
+      
     </div>
+    
   );
 };
 

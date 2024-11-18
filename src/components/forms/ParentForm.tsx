@@ -45,79 +45,105 @@ const ParentForm = ({
     });
 
   return (
-    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
-      <h1 className="text-2xl text-center font-bold pb-6">
-        {type === "create" ? "Create a new parent" : "Update the parent"}
-      </h1>
-      <div className="flex justify-between flex-wrap gap-6">
+    <div className="block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-full max-w-4xl h-full overflow-hidden">
+      <form
+        className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black overflow-y-auto h-full"
+        onSubmit={onSubmit}
+      >
+        <h1 className="text-2xl font-bold text-center pb-4">
+          {type === "create" ? "Create a New Parent" : "Update Parent"}
+        </h1>
+
+        <span className="text-sm text-gray-500 font-medium">
+          Authentication Information
+        </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputField
+            label="Username"
+            name="username"
+            defaultValue={data?.username}
+            register={register}
+            error={errors?.username}
+          />
+          <InputField
+            label="Email"
+            name="email"
+            defaultValue={data?.email}
+            register={register}
+            error={errors?.email}
+          />
+          <InputField
+            label="Phone"
+            name="phone"
+            defaultValue={data?.phone}
+            register={register}
+            error={errors.phone}
+          />
+        </div>
+
+        <span className="text-sm text-gray-500 font-medium">
+          Personal Information
+        </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputField
+            label="First Name"
+            name="name"
+            defaultValue={data?.name}
+            register={register}
+            error={errors.name}
+          />
+          <InputField
+            label="Last Name"
+            name="surname"
+            defaultValue={data?.surname}
+            register={register}
+            error={errors.surname}
+          />
+          <InputField
+            label="Address"
+            name="address"
+            defaultValue={data?.address}
+            register={register}
+            error={errors.address}
+          />
+          <InputField
+            label="Student ID"
+            name="studentId"
+            defaultValue={data?.studentId}
+            register={register}
+            error={errors.studentId}
+          />
+        </div>
+
+        <span className="text-sm text-gray-500 font-medium">
+          Security Information
+        </span>
         <InputField
-          label="Username"
-          name="username"
-          defaultValue={data?.username}
+          label="Password"
+          name="password"
+          defaultValue={type === "create" ? "Harvitt@36963" : data?.password}
           register={register}
-          error={errors?.username}
+          error={errors?.password}
+          type="password"
         />
-        <InputField
-          label="Email"
-          name="email"
-          defaultValue={data?.email}
-          register={register}
-          error={errors?.email}
-        />
-        <InputField
-          label="Phone"
-          name="phone"
-          defaultValue={data?.phone}
-          register={register}
-          error={errors.phone}
-        />
-      </div>
-      <div className="flex justify-between flex-wrap gap-4">
-        <InputField
-          label="First Name"
-          name="name"
-          defaultValue={data?.name}
-          register={register}
-          error={errors.name}
-        />
-        <InputField
-          label="Last Name"
-          name="surname"
-          defaultValue={data?.surname}
-          register={register}
-          error={errors.surname}
-        />
-        <InputField
-          label="Address"
-          name="address"
-          defaultValue={data?.address}
-          register={register}
-          error={errors.address}
-        />
-        <InputField
-          label="Student ID"
-          name="studentId"
-          defaultValue={data?.studentId}
-          register={register}
-          error={errors.studentId}
-        />
-      </div>
-      <InputField
-      label="Password"
-      name="password"
-      defaultValue={data?.password || ""}
-      register={register}
-      error={errors?.password}
-      type="password"
-    />
-      {errors.studentId && (
-        <span className="text-red-500">{errors.studentId.message}</span>
-      )}
-      <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
-        {type === "create" ? "Create" : "Update"}
-      </button>
-    </form>
-  );
+
+        {errors.studentId && (
+          <span className="text-xs text-red-400">
+            {errors.studentId.message}
+          </span>
+        )}
+
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+        >
+          {type === "create" ? "Create" : "Update"}
+        </button>
+      </form>
+    </div>
+  </div>
+);
 };
 
 export default ParentForm;

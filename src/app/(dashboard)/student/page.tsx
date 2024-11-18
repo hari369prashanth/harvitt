@@ -13,7 +13,6 @@ interface SearchParams {
 const StudentPage = async ({ searchParams }: { searchParams: SearchParams }) => {
   const { userId } = auth();
 
-  // Fetch user profile data
   const user = await prisma.student.findUnique({
     where: { id: userId! },
     select: {
@@ -24,7 +23,7 @@ const StudentPage = async ({ searchParams }: { searchParams: SearchParams }) => 
       phone: true,
       username: true,
       img: true,
-      classId: true,  // Assuming classId is available
+      classId: true,
       birthday: true,
     },
   });
@@ -34,25 +33,22 @@ const StudentPage = async ({ searchParams }: { searchParams: SearchParams }) => 
   const birthday = new Date(user.birthday);
   const age = new Date().getFullYear() - birthday.getFullYear();
 
-  // Fetch class name using classId
   const classInfo = await prisma.class.findUnique({
     where: { id: user.classId },
     select: { name: true },
   });
 
-  const className = classInfo?.name || "No Class"; // Default value if className is not found
+  const className = classInfo?.name || "No Class";
 
-  // Prepare userProfile object, handle null for email and phone
   const userProfile = {
     ...user,
     age,
     role: "Student",
     className,
-    email: user.email || "Not Provided",  // Default value if email is null
-    phone: user.phone || "Not Provided",  // Default value if phone is null
+    email: user.email || "Not Provided",
+    phone: user.phone || "Not Provided",
   };
 
-  // Fetch class items and get classId and className if available
   const classItem = await prisma.class.findMany({
     where: {
       students: { some: { id: userId! } },
@@ -64,44 +60,33 @@ const StudentPage = async ({ searchParams }: { searchParams: SearchParams }) => 
   const classNameFallback = classItem.length > 0 ? classItem[0].name : "No Class";
 
   return (
-    <div>
-      
-    <div className="p-4 flex gap-4 flex-col xl:flex-row student-container">
+    <div className="p-4 flex flex-col gap-6 xl:flex-row student-container">
       {/* LEFT */}
-      <div className="w-full xl:w-1/3 h-full rounded-md bg-transparent-white-contrast">
-      <div className="mb-5">
-        <UserProfileCard userProfile={userProfile} />
+      <div className="w-full xl:w-1/3 bg-transparent-white-contrast rounded-md mb-4 xl:mb-0">
+        <div className="mb-5">
+          <UserProfileCard userProfile={userProfile} />
         </div>
-        <Performance  role="student" studentId={user.id}/>
+        <Performance role="student" studentId={user.id} />
       </div>
-      
 
       {/* MIDDLE */}
       <div className="w-full xl:w-2/3">
-      
-      
-      
-        <div className="  bg-white p-4 rounded-md bg-transparent-white-contrast ">
-          
-          <h1 className="text-2xl font-bold text-[#5CE0FF]">Schedule ({classNameFallback})</h1>
+        <div className="bg-white p-4 rounded-md bg-transparent-white-contrast mb-4">
+          <h1 className="text-xl font-bold text-[#5CE0FF]">Schedule ({classNameFallback})</h1>
           {classId ? (
-            
             <BigCalendarContainer type="classId" id={classId} />
           ) : (
-            <p className="text-white">No class schedule available.</p>
+            <p className="text-gray-600">No class schedule available.</p>
           )}
         </div>
-        
       </div>
-      
+
       {/* RIGHT */}
-      <div className="w-full xl:w-1/3 flex flex-col gap-8">
+      <div className="w-full xl:w-1/3 flex flex-col gap-4">
         <EventCalendarContainer searchParams={searchParams} />
         <Announcements />
-        
       </div>
-      
-    </div> </div>
+    </div>
   );
 };
 

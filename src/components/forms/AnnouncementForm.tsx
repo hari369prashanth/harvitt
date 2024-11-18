@@ -45,12 +45,16 @@ const AnnouncementForm = ({ type, data, setOpen, relatedData }: AnnouncementForm
     }
   });
 
-  return (
-    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
+  return (<div className=" block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm h-full">
+    <div className="relative w-full max-w-4xl  overflow-hidden">
+
+    <form className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black  h-full" onSubmit={onSubmit}>
       <h1 className="text-2xl text-center font-bold">
         {type === "create" ? "Create a new announcement" : "Update the announcement"}
       </h1>
-
+      <span className="text-sm text-gray-500 font-medium">
+          Announcement Details
+        </span>
       <InputField
         label="Announcement Title"
         name="title"
@@ -102,6 +106,8 @@ const AnnouncementForm = ({ type, data, setOpen, relatedData }: AnnouncementForm
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>
+    </div>
+    </div>
   );
 };
 

@@ -91,7 +91,9 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ type, data, setOpen, re
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4 text-black">
+    <div className="block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-full max-w-4xl h-full overflow-hidden">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black overflow-y-auto h-full">
       <h1 className="text-2xl text-center font-bold">
         {type === "create" ? "Create a new attendance" : "Update the attendance"}
       </h1>
@@ -194,6 +196,8 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({ type, data, setOpen, re
         </div>
       )}
     </form>
+    </div>
+    </div>
   );
 };
 

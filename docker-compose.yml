@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgress:
+  postgres:
     image: postgres:15
     container_name: postgres_db
     environment:
@@ -12,16 +12,23 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    
+
   app:
-    build: .
-    container_name: nextjs_app
+    build:
+      context: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
-      - DATABASE_URL: postgresql://harvitt:harvitt36963@localhost:5432/school
+      - DATABASE_URL=postgresql://harvitt:harvitt36963@postgres:5432/school
     depends_on:
       - postgres
+    volumes:
+      - .:/app
+    command: >
+      sh -c "
+      npx prisma migrate dev --name init &&
+      npm run start
+      "
 
 volumes:
   postgres_data:

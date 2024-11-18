@@ -43,10 +43,15 @@ const AssignmentForm = ({
   });
 
   return (
-    <form className="flex flex-col gap-8 text-black" onSubmit={onSubmit}>
-      <h1 className="text-2xl text-center font-bold">
-        {type === "create" ? "Create a new assignment" : "Update the assignment"}
+    <div className="block inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-full max-w-4xl h-full overflow-hidden">
+    <form className="flex flex-col gap-6 p-6 bg-white bg-opacity-80 backdrop-blur-lg shadow-xl rounded-lg text-black overflow-y-auto h-full" onSubmit={onSubmit}>
+      <h1 className="text-2xl text-center font-bold pb-4">
+        {type === "create" ? "Create a New Assignment" : "Update the Assignment"}
       </h1>
+      <span className="text-md text-gray-500 font-medium">
+          Assignment Details
+        </span>
 
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
@@ -108,6 +113,8 @@ const AssignmentForm = ({
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>
+    </div>
+    </div>
   );
 };
 
