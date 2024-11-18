@@ -236,27 +236,105 @@ export const updateTeacher = async (
   }
 };
 
-export const deleteTeacher = async (
+export const deleteTeacher = async ( 
   currentState: CurrentState,
   data: FormData
 ) => {
   const id = data.get("id") as string;
-  try {
-    await clerkClient.users.deleteUser(id);
 
-    await prisma.teacher.delete({
+  try {
+    await prisma.exam.deleteMany({
       where: {
-        id: id,
+        lesson: {
+          teacherId: id, // Delete exams for lessons taught by this teacher
+        },
+      },
+    });
+    // Step 1: Delete results associated with exams or assignments for this teacher's lessons
+    await prisma.result.deleteMany({
+      where: {
+        OR: [
+          { exam: { lesson: { teacherId: id } } }, // Results from exams
+          { assignment: { lesson: { teacherId: id } } }, // Results from assignments
+        ],
       },
     });
 
-    // revalidatePath("/list/teachers");
+    // Step 2: Delete assignments for lessons taught by this teacher
+    await prisma.assignment.deleteMany({
+      where: {
+        lesson: {
+          teacherId: id, // Delete assignments for lessons taught by this teacher
+        },
+      },
+    });
+
+    // Step 3: Delete attendances for those lessons
+    await prisma.attendance.deleteMany({
+      where: {
+        lesson: {
+          teacherId: id, // Delete attendance records for lessons taught by this teacher
+        },
+      },
+    });
+
+    // Step 4: Delete lessons associated with this teacher
+    await prisma.lesson.deleteMany({
+      where: {
+        teacherId: id, // Delete all lessons taught by this teacher
+      },
+    });
+
+    // Step 5: Find subjects taught by this teacher
+    const subjects = await prisma.subject.findMany({
+      where: {
+        teachers: {
+          some: { id: id }, // Subjects where this teacher is part of
+        },
+      },
+    });
+
+    // Step 6: Disconnect the teacher from each subject
+    for (const subject of subjects) {
+      await prisma.subject.update({
+        where: { id: subject.id },
+        data: {
+          teachers: {
+            disconnect: { id: id }, // Disconnect the teacher from the subject
+          },
+        },
+      });
+    }
+
+    // Step 7: Delete any classes supervised by this teacher
+    await prisma.class.updateMany({
+      where: {
+        supervisorId: id, // Remove the teacher as the class supervisor
+      },
+      data: {
+        supervisorId: null, // Set supervisor to null before deleting teacher
+      },
+    });
+
+    // Step 8: Finally, delete the teacher record
+    await prisma.teacher.delete({
+      where: { id: id },
+    });
+
+    // Step 9: Optionally, delete the teacher's user record from Clerk
+    try {
+      await clerkClient.users.deleteUser(id);
+    } catch (err) {
+      console.log("Error deleting user in Clerk:", err);
+    }
+
     return { success: true, error: false };
   } catch (err) {
-    console.log(err);
+    console.log("Error deleting teacher:", err);
     return { success: false, error: true };
   }
 };
+
 
 // Ensure Clerk is correctly imported
 
@@ -298,19 +376,12 @@ export const createStudent = async (currentState: CurrentState, data: StudentSch
         birthday: data.birthday,
         gradeId: data.gradeId,
         classId: data.classId,
-        parentId: data.parentId  
+        parentId: data.parentId || null,
       },
     });
 
     // Automatically add an attendance record
-    await prisma.attendance.create({
-      data: {
-        studentId: student.id,
-        date: new Date(), // Default to the current date; adjust as needed
-        present: false, // Adjust the default status as needed
-        lessonId: 1, // Assign a default or dynamic lesson ID as required
-      },
-    });
+   
 
     return { success: true, error: false };
   } catch (err) {
@@ -365,28 +436,45 @@ export const updateStudent = async (
 };
 
 
-export const deleteStudent = async (
-  currentState: CurrentState,
-  data: FormData
-) => {
+export const deleteStudent = async (currentState: CurrentState, data: FormData) => {
   const id = data.get("id") as string;
-  try {
-    await clerkClient.users.deleteUser(id);
 
+  try {
+    // Delete related records manually (in case cascading deletes are not configured)
+    await prisma.result.deleteMany({
+      where: {
+        studentId: id,  // Delete all results associated with the student
+      },
+    });
+
+    await prisma.attendance.deleteMany({
+      where: {
+        studentId: id,  // Delete all attendance records associated with the student
+      },
+    });
+
+    // Optionally, delete other records like Parent, if necessary
+    
+    // Now, delete the student record itself
     await prisma.student.delete({
       where: {
         id: id,
       },
     });
 
-    // revalidatePath("/list/students");
+    // Optionally delete from Clerk if user exists
+    try {
+      await clerkClient.users.deleteUser(id);  // Assumes the user ID is the same as the student ID
+    } catch (err) {
+      console.log("User not found in Clerk or error deleting user in Clerk:", err);
+    }
+
     return { success: true, error: false };
   } catch (err) {
-    console.log(err);
+    console.log("Error deleting student:", err);
     return { success: false, error: true };
   }
 };
-
 export const createExam = async (
   currentState: CurrentState,
   data: ExamSchema
@@ -874,18 +962,44 @@ export const deleteParent = async (
   const id = data.get("id") as string;
 
   try {
-    // Delete the parent user from Clerk
-    await clerkClient.users.deleteUser(id);
-
-    // Delete the parent record from the Prisma database
-    await prisma.parent.delete({
+    // Step 1: Delete attendance records for all students associated with this parent
+    await prisma.attendance.deleteMany({
       where: {
-        id: id,
+        student: {
+          parentId: id, // Find all attendance records linked to the students of this parent
+        },
       },
     });
 
-    // Optionally, revalidate any related paths if needed
-    // revalidatePath("/list/parents");
+    // Step 2: Delete results for all students associated with this parent
+    await prisma.result.deleteMany({
+      where: {
+        student: {
+          parentId: id, // Find all results linked to the students of this parent
+        },
+      },
+    });
+
+    // Step 3: Delete all students associated with this parent
+    await prisma.student.deleteMany({
+      where: {
+        parentId: id, // Find all students linked to this parent
+      },
+    });
+
+    // Step 4: Delete the parent record
+    await prisma.parent.delete({
+      where: {
+        id: id, // Delete the parent record
+      },
+    });
+
+    // Step 5: Optionally delete the parent user from Clerk (if needed)
+    try {
+      await clerkClient.users.deleteUser(id);
+    } catch (err) {
+      console.log("Error deleting user in Clerk:", err);
+    }
 
     return { success: true, error: false };
   } catch (err) {
@@ -893,6 +1007,7 @@ export const deleteParent = async (
     return { success: false, error: true };
   }
 };
+
 export const createAttendance = async (data: AttendanceSchema) => {
   try {
     // Prepare the data array for each lesson

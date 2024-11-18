@@ -10,7 +10,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^5.0.61",
+    "@clerk/clerk-sdk-node": "^5.0.65",
     "@clerk/elements": "^0.16.2",
     "@clerk/nextjs": "^5.7.5",
     "@heroicons/react": "^2.1.5",
